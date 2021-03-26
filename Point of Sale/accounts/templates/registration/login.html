@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class = "container py-5 d-flex align-items-center " style= "height: 100vh;">
+  <div class="card col-md-4 offset-md-4 bg-info d-flex align-items-center" id ="login-card">
+    <div class="card-body">
+      <h5>Login</h5>
+      <hr>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Log In</button>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock content %}

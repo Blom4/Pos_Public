@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include "partials/navbar.html" %}
+<main class="container">
+    <div class="row mt-5 justify-content-between">
+        <div class="col-md-2 p-0 shadow" style="height: 80vh;">
+            <div class=" bg-info border-bottom text-white">
+                <center><h4>Category</h4></center>
+            </div>
+
+            <ul class="list-group list-group-flush bg-info">
+                {% for category in categories %}
+                <li class="list-group-item"><a href="{% url 'store:category_items' category.id %}">{{category}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-md-9 p-0 " style="height: 80vh;">
+            <div class="row border-bottom text-info justify-content-between d-flex">
+                <span class="py-3"><h4>Products</h4></span>
+                <span><input type="text"  class="form-control text-info" placeholder="search Product"></span>
+                <span>
+                    <button class="btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#product_add_modal">
+                        <i class="fas fa-plus"></i>
+                        <span class="d-none d-sm-inline">Product</span>
+                    </button>
+                </span>
+                {% include "partials/product_add_modal.html" %}
+            </div>
+            <div class="row d-flex  ">
+                {% for product in products %}
+                <div class="card mx-3 my-3 " style="width: 18rem;">
+                    <div class="card-header bg-info text-white">
+                      {{product.name}}
+                    </div>
+                    <ul class="list-group list-group-flush text-info">
+                      <li class="list-group-item">Price: M{{product.price}}</li>
+                      <li class="list-group-item">Size: {{product.size}}</li>
+                      <li class="list-group-item">Quantity: {{product.quantity}}</li>
+                    </ul>
+                  </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}

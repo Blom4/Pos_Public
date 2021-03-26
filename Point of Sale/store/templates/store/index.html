@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include "partials/navbar.html" %}
+<main class="container pt-3 ">
+    <div class="row border-bottom d-flex justify-content-end pb-2">
+     <div class="col-10 d-flex align-items-center justify-content-between ">
+        <span class="text-info"><strong>Items:{{cart_items.count}}</strong></span>
+        <span class="text-info"><strong>Pay: M{{pay_price}}</strong></span>
+        <span class="text-info"><strong>Chage: M{{change}}</strong></span>
+     </div>
+     
+      <div class="col-2 d-flex justify-content-end">
+
+        
+        {% if is_order_complete == False %}
+        <button class="btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#item_add_modal">
+            <i class="fas fa-plus"></i>
+            <span class="d-none d-sm-inline">Item</span>
+        </button>
+        {% else %}
+        <a class="btn btn-primary btn-sm" role="button" href = "{% url 'store:start_order' %}">Next Customer <i class="fas fa-next"></i></a>
+        {% endif %}
+            
+        
+        {% include "partials/item_add_modal.html" %}
+      </div>  
+    </div>
+
+    <div class="row d-flex py-3">
+        <div class="col-sm-6 offset-sm-3"> 
+            {% if is_order_complete == False %}
+                <form action="{% url 'store:comfirm_payment' order.id pay_price  %}" method="post" class="d-flex flex-row-md justify-content-between">
+                    {% csrf_token %}
+                        <input type="number" class="form-control text-info mx-1" name='customer_amount' placeholder="Customer Amount">
+                        <input type="submit" class="btn btn-primary" value="Confirm Payment">
+                </form>
+           {% endif %}
+        </div>
+    </div>
+
+
+    <div class="col-md-10 offset-md-1 border shadow p-0 ">
+        <div class="py-1 bg-info text-white">
+            <center><h4>Products In The Cart</h4></center>
+        </div>
+        <div class="overflow-auto " style="height:60vh">
+        <table class="table text-info" >
+            <thead>
+            <tr>
+                <th scope="col"><center>ID</center></th>
+                <th scope="col"><center>Name</center></th>
+                <th scope="col"><center>Quantity</center></th>
+                <th scope="col"><center>Price</center></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+                
+                {% if is_order_complete == False %}
+                {% for item in cart_items %}
+                <tr>
+                    <th scope="row"><center>{{item.id}}</center></th>
+                    <td><center>{{item.product.name}}</center></td>
+                    <td><center>{{item.quantity}}</center></td>
+                    <td><center>{{item.product.price}}</center></td>
+                    <td><a href="{% url 'store:decrease_quantity' item.id %}" class="btn btn-primary"><center><small><i class="fas fa-minus"></i></small></center></td>
+                    <td><a href="{% url 'store:increase_quantity' item.id %}" class="btn btn-danger"><center><small><i class="fas fa-plus"></i></small></center></td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+</main>
+{% endblock content %}
